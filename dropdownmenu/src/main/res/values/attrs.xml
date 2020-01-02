@@ -12,25 +12,19 @@
         <attr name="menuPressedBackColor" format="color|reference" />
         //Menu的按下的字体颜色
         <attr name="menuPressedTitleTextColor" format="color|reference" />
-        //列表的背景
-        <attr name="menuListBackColor" format="color|reference" />
-        //Menu list 的字体颜色
-        <attr name="menuListTextColor" format="color|reference" />
-        //Menu list 的字体大小
-        <attr name="menuListTextSize" format="dimension" />
-        //Menu list 选中图标
-        <attr name="menuListItemCheckIcon" format="reference" />
         //Menu 下拉图标
         <attr name="menuDropDownSelectedIcon" format="reference" />
         //Menu 上拉图标
         <attr name="menuDropDownUnSelectedIcon" format="reference" />
-        //Menu list divider
-        <attr name="menuListDivider" format="boolean" />
-        //Menu list check
-        <attr name="menuListCheck" format="boolean" />
         //Menu arrow title margin
         <attr name="menuArrowMarginTitle" format="dimension" />
 
     </declare-styleable>
+
+
+    <declare-styleable name="MaxHeightRecyclerView">
+        <attr name="maxHeight" format="dimension" />
+    </declare-styleable>
+
 
 </resources>

@@ -8,18 +8,7 @@
         android:id="@+id/mDropRlv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <ListView
-        android:visibility="gone"
-        android:id="@+id/lv_menu"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:background="#ffffff"
-        android:dividerHeight="0.2dp"
-        android:overScrollMode="never"
-        android:scrollbars="none"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </ListView>
+
     <RelativeLayout
         android:layout_below="@id/mDropRlv"
         android:layout_width="fill_parent"

@@ -7,22 +7,19 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <com.ty.dropdownmenu2.DropDownMenu
+    <com.ty.dropdownmenu.DropDownMenu
         android:id="@+id/mDropDownMenu"
         android:layout_width="match_parent"
         android:layout_height="46dp"
         android:background="#ffffff"
         app:menuArrowMarginTitle="20dp"
         app:menuBackColor="#ffffff"
-        app:menuListBackColor="#ffffff"
-        app:menuListCheck="true"
-        app:menuListDivider="true"
-        app:menuListTextColor="#333333"
-        app:menuListTextSize="15sp"
         app:menuPressedBackColor="#ffffff"
         app:menuPressedTitleTextColor="#fc4d16"
         app:menuTitleTextColor="#333333"
         app:menuTitleTextSize="14sp" />
+
+
 
 
 </LinearLayout>
