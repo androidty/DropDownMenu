@@ -7,5 +7,5 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="divider">#f1f1f1</color>
-    <color name="c_gary_line">#FFE7E7E7</color>
+    <color name="c_gary_line">#ff999999</color>
 </resources>

@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,23 +19,18 @@ import com.ty.listener.OnMenuClickListener
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private var city_index: Int = 0
-    private var sex_index: Int = 0
-    private var age_index: Int = 0
-    internal var items: MutableList<Array<String>> = ArrayList()
     val arr1 = arrayOf("全部城市", "北京", "上海", "广州", "深圳")
     val arr2 = arrayOf("性别", "男", "女")
     val arr3 = arrayOf("全部年龄", "10", "20", "30", "40", "50", "60", "70", "80", "90")
-    private var recyclerView: RecyclerView? = null
     private var dropBeans1: ArrayList<DropBean>? = ArrayList()
     private var dropBeans2: ArrayList<DropBean>? = ArrayList()
     private var dropBeans3: ArrayList<DropBean>? = ArrayList()
-    private var adapter1: MyAdapter<DropBean>? = null
-    private var adapter2: MyAdapter<DropBean>? = null
-    private var adapter3: MyAdapter<DropBean>? = null
 
-    internal val strings = arrayOf("选择城市", "选择性别", "选择年龄")
+    private var dropAdapter: MyAdapter<DropBean>? = null
 
+    private val strings = arrayOf("选择城市", "选择性别", "选择年龄")
+
+    //
     var mDropDownView: View? = null
     var mShadowRl: RelativeLayout? = null
     var mPopupWindow: PopupWindow? = null
@@ -44,28 +40,22 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         initData()
+
         initDropDownMenu()
     }
 
     private fun initData() {
-        dropBeans1?.add(DropBean())
-        dropBeans1?.add(DropBean())
-        dropBeans1?.add(DropBean())
-
-        dropBeans2?.add(DropBean())
-        dropBeans2?.add(DropBean())
-        dropBeans2?.add(DropBean())
-        dropBeans2?.add(DropBean())
-
-
-        dropBeans3?.add(DropBean())
-        dropBeans3?.add(DropBean())
-        dropBeans3?.add(DropBean())
-        dropBeans3?.add(DropBean())
-        dropBeans3?.add(DropBean())
-
-
+        for (name in arr1) {
+            dropBeans1?.add(DropBean(name))
+        }
+        for (name in arr2) {
+            dropBeans2?.add(DropBean(name))
+        }
+        for (name in arr3) {
+            dropBeans3?.add(DropBean(name))
+        }
     }
 
     private fun initDropDownMenu() {
@@ -94,27 +84,27 @@ class MainActivity : AppCompatActivity() {
         }
         mDropDownMenu?.setDropWindow(mPopupWindow!!, mShadowRl!!)
 
-        mDropRlv!!.addItemDecoration(MyDividerItemDecoration(this, null, 0, 15, 15, false))
+        mDropRlv!!.addItemDecoration(MyDividerItemDecoration(this, null, 1, 15, 15, true))
         mDropRlv!!.layoutManager = LinearLayoutManager(this)
-        if (adapter1 == null) {
-            adapter1 = MyAdapter(R.layout.menu_list_item, dropBeans1)
+        if (dropAdapter == null) {
+            dropAdapter = MyAdapter(R.layout.menu_list_item, dropBeans1)
         }
-        mDropRlv!!.adapter = adapter1
-        adapter1!!.setOnItemClickListener { adapter, view, position ->
-            //            Toast.makeText(this, position, Toast.LENGTH_LONG).show()
+        mDropRlv!!.adapter = dropAdapter
+        dropAdapter!!.setOnItemClickListener { adapter, view, position ->
+            (adapter.data[position] as DropBean)?.name?.let { mDropDownMenu.setCurrentTitle(index, it) };
             setSelect(position, adapter.data as List<DropBean>)
             mPopupWindow!!.dismiss()
         }
 
         when (index) {
             0 -> {
-                adapter1?.setNewData(dropBeans1)
+                dropAdapter?.setNewData(dropBeans1)
             }
             1 -> {
-                adapter1?.setNewData(dropBeans2)
+                dropAdapter?.setNewData(dropBeans2)
             }
             2 -> {
-                adapter1?.setNewData(dropBeans3)
+                dropAdapter?.setNewData(dropBeans3)
             }
             else -> {
             }

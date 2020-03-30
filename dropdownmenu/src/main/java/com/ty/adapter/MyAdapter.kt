@@ -19,7 +19,7 @@ class MyAdapter<Item:DropBean>(layoutResId: Int, data: List<DropBean>?) : Common
     }
 
     override fun convert(helper: BaseViewHolder, item: DropBean) {
-        helper.setText(R.id.tv_menu_item, "dsaklfj")
+        helper.setText(R.id.tv_menu_item, item.name)
         helper.setGone(R.id.iv_menu_select,item.isSelect)
     }
 
