@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private var dropBeans2: ArrayList<DropBean>? = ArrayList()
     private var dropBeans3: ArrayList<DropBean>? = ArrayList()
 
+
     private var dropAdapter: MyAdapter<DropBean>? = null
 
     private val strings = arrayOf("选择城市", "选择性别", "选择年龄")
