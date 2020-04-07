@@ -25,11 +25,13 @@ class MainActivity : AppCompatActivity() {
     private var dropBeans1: ArrayList<DropBean>? = ArrayList()
     private var dropBeans2: ArrayList<DropBean>? = ArrayList()
     private var dropBeans3: ArrayList<DropBean>? = ArrayList()
-
+    var option1: String? = null
+    var option2: String? = null
+    var option3: String? = null
 
     private var dropAdapter: MyAdapter<DropBean>? = null
 
-    private val strings = arrayOf("选择城市", "选择性别", "选择年龄")
+    private val strings = arrayOf("选择城市", "选择性别", "选择年龄", "选择年龄","选择年龄")
 
     //
     var mDropDownView: View? = null
@@ -60,8 +62,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initDropDownMenu() {
-        mDropDownMenu!!.setMenuCount(3)
+        mDropDownMenu!!.setMenuCount(5)
         mDropDownMenu?.setDefaultMenuTitle(strings)
+        mDropDownMenu1?.setDefaultStr(strings)
         mDropDownMenu?.onMenuClickListener = object : OnMenuClickListener {
             override fun onMenuClickListener(context: Context, index: Int) {
                 setDropList(context, index)
@@ -91,11 +94,7 @@ class MainActivity : AppCompatActivity() {
             dropAdapter = MyAdapter(R.layout.menu_list_item, dropBeans1)
         }
         mDropRlv!!.adapter = dropAdapter
-        dropAdapter!!.setOnItemClickListener { adapter, view, position ->
-            (adapter.data[position] as DropBean)?.name?.let { mDropDownMenu.setCurrentTitle(index, it) };
-            setSelect(position, adapter.data as List<DropBean>)
-            mPopupWindow!!.dismiss()
-        }
+
 
         when (index) {
             0 -> {
@@ -108,7 +107,21 @@ class MainActivity : AppCompatActivity() {
                 dropAdapter?.setNewData(dropBeans3)
             }
             else -> {
+                dropAdapter?.setNewData(dropBeans1)
             }
+        }
+
+        //下拉列表点击事件
+        dropAdapter!!.setOnItemClickListener { adapter, view, position ->
+            (adapter.data[position] as DropBean)?.name?.let { mDropDownMenu.setCurrentTitle(index, it) }
+            when (index) {
+                0 -> option1 = (adapter.data[position] as DropBean)?.name
+                1 -> option2 = (adapter.data[position] as DropBean)?.name
+                2 -> option3 = (adapter.data[position] as DropBean)?.name
+            }
+            setSelect(position, adapter.data as List<DropBean>)
+            mPopupWindow!!.dismiss()
+            Toast.makeText(MainActivity@ this, "$option1 $option2 $option3", Toast.LENGTH_LONG).show()
         }
     }
 

@@ -7,16 +7,8 @@ package com.ty
  * email：
  * description：
  */
-class DropBean {
-    constructor(name: String?) {
-        this.name = name
-    }
-
-    constructor() {}
-
+class DropBean(var name: String) {
     var isSelect = false
-    var name: String? = null
     var img: String? = null
     var letter: String? = null
-
 }

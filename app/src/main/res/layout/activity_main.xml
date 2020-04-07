@@ -20,6 +20,10 @@
         app:menuTitleTextSize="14sp" />
 
 
-
+    <com.ty.dropdownmenu.DropDownMenu1
+        android:background="#23002399"
+        android:id="@+id/mDropDownMenu1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
 
 </LinearLayout>

@@ -3,23 +3,18 @@ package com.ty.dropdownmenu
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.PopupWindow
-import android.widget.RelativeLayout
-import android.widget.TextView
-
+import android.view.View.OnClickListener
+import android.view.ViewGroup
+import android.widget.*
 import com.ty.listener.OnMenuClickListener
 import com.ty.utils.DensityUtil
-
-import java.util.ArrayList
+import java.util.*
 
 
 class DropDownMenu @JvmOverloads constructor(mContext: Context, attrs: AttributeSet? = null) : LinearLayout(mContext, attrs) {
@@ -27,8 +22,10 @@ class DropDownMenu @JvmOverloads constructor(mContext: Context, attrs: Attribute
 
     //菜单 上的文字
     private val mTvMenuTitles = ArrayList<TextView>()
+
     //菜单 的背景布局
     private val mRlMenuBacks = ArrayList<RelativeLayout>()
+
     //菜单 的箭头
     private val mIvMenuArrow = ArrayList<ImageView>()
 
@@ -42,34 +39,41 @@ class DropDownMenu @JvmOverloads constructor(mContext: Context, attrs: Attribute
 
     // 主Menu的个数
     private var mMenuCount: Int = 0
+
     // Menu 展开的list 显示数量
     private var mShowCount: Int = 0
 
-    //选中行数
-    private val mRowSelected = 0
+
     //选中列数
     private var mColumnSelected = 0
 
     //Menu的字体颜色
     private var mMenuTitleTextColor: Int = 0
+
     //Menu的字体大小
     private var mMenuTitleTextSize: Float = 0.toFloat()
+
     //Menu的按下的字体颜色
     private var mMenuPressedTitleTextColor: Int = 0
+
     //Menu的按下背景
     private var mMenuPressedBackColor: Int = 0
+
     //Menu的背景
     private var mMenuBackColor: Int = 0
 
     //列表的按下效果
     private var mMenuListSelectorRes: Int = 0
+
     //箭头距离
     private var mArrowMarginTitle: Int = 0
 
     //对勾的图片资源
     private var mCheckIcon: Int = 0
+
     //向上的箭头图片资源
     private var mUpArrow: Int = 0
+
     //向下的箭头图片资源
     private var mDownArrow: Int = 0
 
@@ -130,6 +134,11 @@ class DropDownMenu @JvmOverloads constructor(mContext: Context, attrs: Attribute
     fun setMenuCount(menuCount: Int) {
         mMenuCount = menuCount
     }
+
+    fun getMenuCount() {
+        if(mMenuCount == 0)1 else 0
+    }
+
     fun setmMenuListSelectorRes(menuListSelectorRes: Int) {
         mMenuListSelectorRes = menuListSelectorRes
     }
@@ -142,8 +151,8 @@ class DropDownMenu @JvmOverloads constructor(mContext: Context, attrs: Attribute
         mMenuPressedTitleTextColor = menuPressedTitleTextColor
     }
 
-    fun setDefaultMenuTitle(mDefaultMenuTitle: Array<String>) {
-        this.mDefaultMenuTitle = mDefaultMenuTitle
+    fun setDefaultMenuTitle(defaultMenuTitle: Array<String>) {
+        this.mDefaultMenuTitle = defaultMenuTitle
         mDrawable = true
         invalidate()
     }
@@ -194,8 +203,7 @@ class DropDownMenu @JvmOverloads constructor(mContext: Context, attrs: Attribute
         super.onDraw(canvas)
         if (mDrawable) {
             val width = width
-
-            for (i in mDefaultMenuTitle!!.indices) {3
+            for (i in mDefaultMenuTitle!!.indices) {
                 val v = LayoutInflater.from(mContext).inflate(R.layout.menu_item, null, false) as RelativeLayout
                 val parms = RelativeLayout.LayoutParams(width / mMenuCount, LinearLayout.LayoutParams.WRAP_CONTENT)
                 v.layoutParams = parms
@@ -203,7 +211,9 @@ class DropDownMenu @JvmOverloads constructor(mContext: Context, attrs: Attribute
                 tv.setTextColor(mMenuTitleTextColor)
                 tv.textSize = mMenuTitleTextSize
                 tv.text = mDefaultMenuTitle!![i]
-                this.addView(v, i)
+                val lp = LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT)
+                lp.weight = 1f
+                this.addView(v, lp)
                 mTvMenuTitles.add(tv)
                 val rl = v.findViewById<View>(R.id.rl_menu_head) as RelativeLayout
                 rl.setBackgroundColor(mMenuBackColor)
@@ -245,13 +255,13 @@ class DropDownMenu @JvmOverloads constructor(mContext: Context, attrs: Attribute
         mTvMenuTitles[cuttentIndex].text = currentTitle
     }
 
-    internal fun animUp(imageView: ImageView) {
+     fun animUp(imageView: ImageView) {
         val animator = ObjectAnimator.ofFloat(imageView, "rotation", 0f, 180f)
         animator.duration = 300
         animator.start()
     }
 
-    internal fun animDown(imageView: ImageView) {
+     fun animDown(imageView: ImageView) {
         val animator = ObjectAnimator.ofFloat(imageView, "rotation", 180f, 0f)
         animator.duration = 300
         animator.start()

@@ -71,5 +71,9 @@ private constructor() {
         fun px2sp(context: Context, pxVal: Float): Float {
             return pxVal / context.resources.displayMetrics.scaledDensity
         }
+
+        fun getScreenWidth(context: Context): Int {
+            return context.resources.displayMetrics.widthPixels
+        }
     }
 }
