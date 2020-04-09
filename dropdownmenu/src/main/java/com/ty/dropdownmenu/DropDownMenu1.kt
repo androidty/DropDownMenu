@@ -25,10 +25,10 @@ class DropDownMenu1 constructor(context: Context, attributes: AttributeSet? = nu
     private lateinit var dropDownMenuLl: LinearLayout
 
     //recyclerview附着在popupwindow上
-    private lateinit var popupWindow: PopupWindow
+    lateinit var popupWindow: PopupWindow
 
     //recyclerView下面的阴影区域
-    private lateinit var shadowLl: LinearLayout
+    lateinit var shadowLl: LinearLayout
 
     //文字
     private val titleTvs: ArrayList<TextView> = ArrayList<TextView>()
@@ -54,8 +54,8 @@ class DropDownMenu1 constructor(context: Context, attributes: AttributeSet? = nu
         dropDownMenuLl = rootView!!.findViewById(R.id.dropMenuLl)
         horizontalScrollView = rootView!!.findViewById(R.id.hScrollView)
         addView(rootView)
-
     }
+
 
     fun setDefaultStr(defaultMenuTitle: Array<String>) {
         defaultStrs = defaultMenuTitle
@@ -76,10 +76,11 @@ class DropDownMenu1 constructor(context: Context, attributes: AttributeSet? = nu
                     iv.setImageResource(R.mipmap.drop_down_unselected_icon)
                     tv.text = defaultStrs!![i]
                     tv.setTextColor(context.resources.getColor(R.color.default_menu_text))
-                    val lp = LinearLayout.LayoutParams(DensityUtil.getScreenWidth(context) /7*2, ViewGroup.LayoutParams.MATCH_PARENT)
+                    val lp = LinearLayout.LayoutParams(DensityUtil.getScreenWidth(context) / 7 * 2, ViewGroup.LayoutParams.MATCH_PARENT)
 
                     v.setOnClickListener {
                         v.findViewById<ImageView>(R.id.iv_menu_arrow).setImageResource(R.mipmap.drop_down_selected_icon)
+                        popupWindow.showAsDropDown(v)
                     }
                     dropDownMenuLl.addView(v, lp)
                 }
