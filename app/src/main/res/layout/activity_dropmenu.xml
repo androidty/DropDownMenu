@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DropMenuActivity">
+
+    <com.ty.dropdownmenu.DropDownMenu
+        android:id="@+id/mDropDownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="#ffffff"
+        app:menuArrowMarginTitle="20dp"
+        app:menuBackColor="#ffffff"
+        app:menuPressedBackColor="#ffffff"
+        app:menuPressedTitleTextColor="#fc4d16"
+        app:menuTitleTextColor="#333333"
+        app:menuTitleTextSize="14sp" />
+
+</LinearLayout>

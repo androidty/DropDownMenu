@@ -18,7 +18,7 @@ import com.ty.utils.DensityUtil
  * email：
  * description：
  */
-class DropDownMenu1 constructor(context: Context, attributes: AttributeSet? = null) : FrameLayout(context, attributes) {
+class ScrollDropDownMenu constructor(context: Context, attributes: AttributeSet? = null) : FrameLayout(context, attributes) {
     private var scrollAble = true
     private var mDrawable = false
     private var horizontalScrollView: HorizontalScrollView? = null
