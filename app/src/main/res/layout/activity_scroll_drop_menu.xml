@@ -10,6 +10,7 @@
 
     <com.ty.dropdownmenu.ScrollDropDownMenu
         android:id="@+id/mDropDownMenu1"
+        android:background="@color/colorAccent"
         android:layout_width="match_parent"
         android:layout_height="50dp"/>
 
