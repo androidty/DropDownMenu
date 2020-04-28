@@ -11,10 +11,10 @@
     <com.ty.dropdownmenu.ScrollDropDownMenu
         android:id="@+id/mDropDownMenu1"
         android:layout_width="match_parent"
-        android:background="#ffffff"
+        android:background="#f0f0f0"
         app:menuArrowMarginTitle="20dp"
-        app:menuBackColor="#ffffff"
-        app:menuPressedBackColor="#ffffff"
+        app:menuBackColor="#f0f0f0"
+        app:menuPressedBackColor="#f0f0f0"
         app:menuPressedTitleTextColor="#fc4d16"
         app:menuTitleTextColor="#333333"
         app:menuTitleTextSize="14sp"

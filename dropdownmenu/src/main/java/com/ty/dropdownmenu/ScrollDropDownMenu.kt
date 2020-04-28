@@ -21,6 +21,7 @@ import com.ty.utils.DensityUtil
  * email：
  * description：
  */
+@Suppress("DEPRECATION")
 class ScrollDropDownMenu constructor(context: Context, attributes: AttributeSet? = null) : FrameLayout(context, attributes) {
     private var scrollAble = true
     private var mDrawable = false
@@ -43,14 +44,8 @@ class ScrollDropDownMenu constructor(context: Context, attributes: AttributeSet?
     // Menu 展开的列表 下部的阴影
     private var mRlShadow: RelativeLayout? = null
 
-    // 主Menu的个数
-    private var mMenuCount: Int = 0
-
-    // Menu 展开的list 显示数量
-    private var mShowCount: Int = 0
 
     //recyclerview附着在popupwindow上
-
     //recyclerView下面的阴影区域
     lateinit var shadowLl: LinearLayout
 
@@ -114,10 +109,6 @@ class ScrollDropDownMenu constructor(context: Context, attributes: AttributeSet?
     @SuppressLint("ResourceAsColor")
     private fun init(context: Context, attributes: AttributeSet? = null) {
         this.mContext = context
-        removeAllViews()
-        var rootView: View? = null
-        rootView = if (scrollAble!!) LayoutInflater.from(context)?.inflate(R.layout.drop_menu_scroll, null)
-        else LayoutInflater.from(context)?.inflate(R.layout.drop_menu_no_scroll, null)
 
 
         val ta = mContext!!.obtainStyledAttributes(attributes, R.styleable.DropDownMenu)
@@ -132,9 +123,23 @@ class ScrollDropDownMenu constructor(context: Context, attributes: AttributeSet?
         ta.recycle()
         mMenuListSelectorRes = R.color.white
         mArrowMarginTitle = 10
+        setScrollAble(false)
+    }
+
+
+    fun setScrollAble(scroll: Boolean) {
+        scrollAble = scroll
+        addRootView()
+    }
+
+    private fun addRootView() {
+        removeAllViews()
+        var rootView: View? = null
+        rootView = if (scrollAble!!) LayoutInflater.from(context)?.inflate(R.layout.drop_menu_scroll, null)
+        else LayoutInflater.from(context)?.inflate(R.layout.drop_menu_no_scroll, null)
+        addView(rootView)
         dropDownMenuLl = rootView!!.findViewById(R.id.dropMenuLl)
         horizontalScrollView = rootView!!.findViewById(R.id.hScrollView)
-        addView(rootView)
     }
 
 
@@ -171,65 +176,66 @@ class ScrollDropDownMenu constructor(context: Context, attributes: AttributeSet?
         super.onDraw(canvas)
         if (mDrawable) {
             mDrawable = false
-            if (scrollAble) {
-                for (i in defaultStrs!!.indices) {
-                    val v = LayoutInflater.from(context).inflate(R.layout.menu_item, null)
-                    var tv = v.findViewById<View>(R.id.tv_menu_title) as TextView
-                    var iv = v.findViewById<View>(R.id.iv_menu_arrow) as ImageView
-                    iv.setImageResource(R.mipmap.drop_down_unselected_icon)
-                    tv.text = defaultStrs!![i]
-                    tv.setTextColor(context.resources.getColor(R.color.black))
-                    val lp = LinearLayout.LayoutParams(DensityUtil.getScreenWidth(context) / 7 * 2, ViewGroup.LayoutParams.MATCH_PARENT)
-                    dropDownMenuLl.addView(v, lp)
-                    mTvMenuTitles.add(tv)
-                    val rl = v.findViewById<View>(R.id.rl_menu_head) as RelativeLayout
-                    rl.setBackgroundColor(mMenuBackColor)
-                    mRlMenuBacks.add(rl)
+            for (i in defaultStrs!!.indices) {
+                val v = LayoutInflater.from(context).inflate(R.layout.menu_item, null)
+                var tv = v.findViewById<View>(R.id.tv_menu_title) as TextView
+                var iv = v.findViewById<View>(R.id.iv_menu_arrow) as ImageView
+                iv.setImageResource(R.mipmap.drop_down_unselected_icon)
+                tv.text = defaultStrs!![i]
+                tv.setTextColor(context.resources.getColor(R.color.black))
 
-                    mIvMenuArrow.add(iv)
-                    mIvMenuArrow[i].setImageResource(mDownArrow)
+                dropDownMenuLl.addView(v, getLayoutParam())
+                mTvMenuTitles.add(tv)
+                val rl = v.findViewById<View>(R.id.rl_menu_head) as RelativeLayout
+                rl.setBackgroundColor(mMenuBackColor)
+                mRlMenuBacks.add(rl)
 
-                    val params = iv.layoutParams as RelativeLayout.LayoutParams
-                    params.leftMargin = mArrowMarginTitle
-                    iv.layoutParams = params
+                mIvMenuArrow.add(iv)
+                mIvMenuArrow[i].setImageResource(mDownArrow)
 
-                    v.setOnClickListener {
-                        if (mCuttentIndex == i) {
-                            mPopupWindow!!.dismiss()
-                            mCuttentIndex = -1
-                            return@setOnClickListener
-                        }
-                        mCuttentIndex = i
-                        v.findViewById<ImageView>(R.id.iv_menu_arrow).setImageResource(R.mipmap.drop_down_selected_icon)
-                        if (onMenuClickListener != null) {
-                            onMenuClickListener!!.onMenuClickListener(mContext!!, i)
-                        }
-                        mColumnSelected = i
-                        mTvMenuTitles[i].setTextColor(mMenuPressedTitleTextColor)
-                        mRlMenuBacks[i].setBackgroundColor(mMenuPressedBackColor)
-                        mIvMenuArrow[i].setImageResource(mUpArrow)
-                        animUp(mIvMenuArrow[i])
-                        mPopupWindow!!.showAsDropDown(v)
+                val params = iv.layoutParams as RelativeLayout.LayoutParams
+                params.leftMargin = mArrowMarginTitle
+                iv.layoutParams = params
+
+                v.setOnClickListener {
+                    if (mCuttentIndex == i) {
+                        mPopupWindow!!.dismiss()
+                        mCuttentIndex = -1
+                        return@setOnClickListener
                     }
-                }
-            } else {
-                for (title in defaultStrs!!) {
-                    val v = LayoutInflater.from(context).inflate(R.layout.menu_item, null)
-                    var tv = v.findViewById<View>(R.id.tv_menu_title) as TextView
-                    var iv = v.findViewById<View>(R.id.iv_menu_arrow) as ImageView
-                    iv.setImageResource(R.mipmap.drop_down_unselected_icon)
-                    tv.text = title
-                    val lp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT)
-                    lp.weight = 1f
-                    dropDownMenuLl.addView(v, lp)
+                    mCuttentIndex = i
+                    v.findViewById<ImageView>(R.id.iv_menu_arrow).setImageResource(mUpArrow)
+                    if (onMenuClickListener != null) {
+                        onMenuClickListener!!.onMenuClickListener(mContext!!, i)
+                    }
+                    mColumnSelected = i
+                    mTvMenuTitles[i].setTextColor(mMenuPressedTitleTextColor)
+                    mRlMenuBacks[i].setBackgroundColor(mMenuPressedBackColor)
+                    mIvMenuArrow[i].setImageResource(mUpArrow)
+                    animUp(mIvMenuArrow[i])
+                    mPopupWindow!!.showAsDropDown(v)
                 }
             }
         }
     }
 
-    fun setCurrentTitle(cuttentIndex: Int, currentTitle: String) {
-        mTvMenuTitles[cuttentIndex].text = currentTitle
+
+    private fun getLayoutParam(): LinearLayout.LayoutParams {
+        return if (scrollAble) {
+            val lp = LinearLayout.LayoutParams(DensityUtil.getScreenWidth(context) / 7 * 2, ViewGroup.LayoutParams.MATCH_PARENT)
+            lp
+        } else {
+            val lp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT)
+            lp.weight = 1f
+            lp
+        }
+
     }
+
+    fun setCurrentTitle(currentIndex: Int, currentTitle: String) {
+        mTvMenuTitles[currentIndex].text = currentTitle
+    }
+
     fun animUp(imageView: ImageView) {
         val animator = ObjectAnimator.ofFloat(imageView, "rotation", 0f, 180f)
         animator.duration = 300

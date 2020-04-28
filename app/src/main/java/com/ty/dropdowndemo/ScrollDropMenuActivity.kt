@@ -45,7 +45,6 @@ class ScrollDropMenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scroll_drop_menu)
         initData()
-
         initDropDownMenu()
 
     }
@@ -62,7 +61,8 @@ class ScrollDropMenuActivity : AppCompatActivity() {
         }
     }
 
-    fun initDropDownMenu() {
+    private fun initDropDownMenu() {
+        mDropDownMenu1.setScrollAble(true)
         mDropDownMenu1?.setDefaultStr(strings)
         mDropDownMenu1?.onMenuClickListener = object : OnMenuClickListener {
             override fun onMenuClickListener(context: Context, index: Int) {
@@ -112,11 +112,11 @@ class ScrollDropMenuActivity : AppCompatActivity() {
 
         //下拉列表点击事件
         dropAdapter!!.setOnItemClickListener { adapter, view, position ->
-            (adapter.data[position] as DropBean)?.name?.let { mDropDownMenu1.setCurrentTitle(index, it) }
+            (adapter.data[position] as DropBean).name.let { mDropDownMenu1.setCurrentTitle(index, it) }
             when (index) {
-                0 -> option1 = (adapter.data[position] as DropBean)?.name
-                1 -> option2 = (adapter.data[position] as DropBean)?.name
-                2 -> option3 = (adapter.data[position] as DropBean)?.name
+                0 -> option1 = (adapter.data[position] as DropBean).name
+                1 -> option2 = (adapter.data[position] as DropBean).name
+                2 -> option3 = (adapter.data[position] as DropBean).name
             }
             setSelect(position, adapter.data as List<DropBean>)
             mPopupWindow!!.dismiss()
