@@ -19,7 +19,7 @@ import com.ty.listener.OnMenuClickListener
 import kotlinx.android.synthetic.main.activity_dropmenu.*
 
 class DropMenuActivity : AppCompatActivity() {
-    val strings = arrayOf("选择城市选", "选择性别", "选择年龄")
+    val strings = arrayOf("选择城市", "选择性别", "选择年龄","价格趋势")
     val arr1 = arrayOf("全部城市", "北京", "上海", "广州", "深圳")
     val arr2 = arrayOf("性别", "男", "女")
     val arr3 = arrayOf("全部年龄", "10", "20", "30", "40", "50", "60", "70", "80", "90")

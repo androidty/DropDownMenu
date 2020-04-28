@@ -1,7 +1,29 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'maven'
 
+ext {
+    // 从Github上clone下来的项目的本地地址
+    //GITHUB_REPO_PATH = "C:\\qibeisdk"
+    GITHUB_REPO_PATH = "/Users/qibei/Documents/GitHub/androidty/dropmenu"
+    // implementation 'com.androidty.dropmenu:dropmenu:1.0.0'
+    PUBLISH_GROUP_ID = 'com.androidty.dropmenu'
+    PUBLISH_ARTIFACT_ID = 'dropmenu'
+    PUBLISH_VERSION = '1.0.0'
+}
+
+uploadArchives {
+    repositories.mavenDeployer {
+        def deployPath = file(project.GITHUB_REPO_PATH)
+        repository(url: "file://${deployPath.absolutePath}")
+        pom.project {
+            groupId project.PUBLISH_GROUP_ID
+            artifactId project.PUBLISH_ARTIFACT_ID
+            version project.PUBLISH_VERSION
+        }
+    }
+}
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"

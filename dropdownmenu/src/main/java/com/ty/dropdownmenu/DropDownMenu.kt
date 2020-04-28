@@ -144,11 +144,17 @@ class DropDownMenu constructor(context: Context, attributes: AttributeSet? = nul
     }
 
 
-    fun initMenu(defaultMenuTitle: Array<String>,scroll: Boolean) {
+    fun initMenu(defaultMenuTitle: Array<String>, scroll: Boolean) {
         defaultStrs = defaultMenuTitle
         setScrollAble(scroll)
         mDrawable = true
         invalidate()
+    }
+
+    fun setDropWindow(popupWindow: PopupWindow) {
+        val rl = RelativeLayout(mContext)
+        rl.setBackgroundColor(Color.WHITE)
+        setDropWindow(popupWindow, rl)
     }
 
 
@@ -184,7 +190,7 @@ class DropDownMenu constructor(context: Context, attributes: AttributeSet? = nul
                 var iv = v.findViewById<View>(R.id.iv_menu_arrow) as ImageView
                 iv.setImageResource(R.mipmap.drop_down_unselected_icon)
                 tv.setTextColor(context.resources.getColor(R.color.black))
-                tv.maxWidth=(DensityUtil.getScreenWidth(context) / defaultStrs!!.size)*3/4
+                tv.maxWidth = (DensityUtil.getScreenWidth(context) / defaultStrs!!.size) * 3 / 4
                 tv.text = defaultStrs!![i]
                 mTvMenuTitles.add(tv)
                 val vP = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
