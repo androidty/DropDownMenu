@@ -11,6 +11,8 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:overScrollMode="never"
+        android:scrollbarSize="2dp"
+        android:scrollbars="none"
         app:maxHeight="300dp" />
 
     <RelativeLayout
@@ -18,5 +20,5 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/mDropRlv"
-        android:background="#70000000"/>
+        android:background="#70000000" />
 </RelativeLayout>

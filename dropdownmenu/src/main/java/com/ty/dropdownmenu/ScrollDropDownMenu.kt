@@ -127,7 +127,7 @@ class ScrollDropDownMenu constructor(context: Context, attributes: AttributeSet?
     }
 
 
-    fun setScrollAble(scroll: Boolean) {
+    private fun setScrollAble(scroll: Boolean) {
         scrollAble = scroll
         addRootView()
     }
@@ -143,8 +143,9 @@ class ScrollDropDownMenu constructor(context: Context, attributes: AttributeSet?
     }
 
 
-    fun setDefaultStr(defaultMenuTitle: Array<String>) {
+    fun initMenu(defaultMenuTitle: Array<String>,scroll: Boolean) {
         defaultStrs = defaultMenuTitle
+        setScrollAble(scroll)
         mDrawable = true
         invalidate()
     }
