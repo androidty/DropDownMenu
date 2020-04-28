@@ -1,14 +1,17 @@
 package com.ty.dropdownmenu
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.ty.listener.OnMenuClickListener
 import com.ty.utils.DensityUtil
 
 /**
@@ -24,8 +27,29 @@ class ScrollDropDownMenu constructor(context: Context, attributes: AttributeSet?
     private var horizontalScrollView: HorizontalScrollView? = null
     private lateinit var dropDownMenuLl: LinearLayout
 
+    //菜单 上的文字
+    private val mTvMenuTitles = java.util.ArrayList<TextView>()
+
+    //菜单 的背景布局
+    private val mRlMenuBacks = java.util.ArrayList<RelativeLayout>()
+
+    //菜单 的箭头
+    private val mIvMenuArrow = java.util.ArrayList<ImageView>()
+
+    private var mContext: Context? = null
+
+    private var mPopupWindow: PopupWindow? = null
+
+    // Menu 展开的列表 下部的阴影
+    private var mRlShadow: RelativeLayout? = null
+
+    // 主Menu的个数
+    private var mMenuCount: Int = 0
+
+    // Menu 展开的list 显示数量
+    private var mShowCount: Int = 0
+
     //recyclerview附着在popupwindow上
-    lateinit var popupWindow: PopupWindow
 
     //recyclerView下面的阴影区域
     lateinit var shadowLl: LinearLayout
@@ -38,6 +62,48 @@ class ScrollDropDownMenu constructor(context: Context, attributes: AttributeSet?
 
     //初始文字
     var defaultStrs: Array<String>? = null
+
+    //选中列数
+    private var mColumnSelected = 0
+
+    //Menu的字体颜色
+    private var mMenuTitleTextColor: Int = 0
+
+    //Menu的字体大小
+    private var mMenuTitleTextSize: Float = 0.toFloat()
+
+    //Menu的按下的字体颜色
+    private var mMenuPressedTitleTextColor: Int = 0
+
+    //Menu的按下背景
+    private var mMenuPressedBackColor: Int = 0
+
+    //Menu的背景
+    private var mMenuBackColor: Int = 0
+
+    //列表的按下效果
+    private var mMenuListSelectorRes: Int = 0
+
+    //箭头距离
+    private var mArrowMarginTitle: Int = 0
+
+    //对勾的图片资源
+    private var mCheckIcon: Int = 0
+
+    //向上的箭头图片资源
+    private var mUpArrow: Int = 0
+
+    //向下的箭头图片资源
+    private var mDownArrow: Int = 0
+
+
+    private var mDefaultMenuTitle: Array<String>? = null
+
+    private var isDebug = true
+
+    private var mCuttentIndex = -1
+
+    var onMenuClickListener: OnMenuClickListener? = null
 
 
     init {
@@ -63,6 +129,28 @@ class ScrollDropDownMenu constructor(context: Context, attributes: AttributeSet?
         invalidate()
     }
 
+
+    fun setDropWindow(popupWindow: PopupWindow, rlShadow: RelativeLayout) {
+        mPopupWindow = popupWindow
+        mRlShadow = rlShadow
+
+        mPopupWindow!!.isTouchable = true
+        mPopupWindow!!.isOutsideTouchable = true
+        mPopupWindow!!.setBackgroundDrawable(BitmapDrawable())
+        mRlShadow!!.setOnClickListener { mPopupWindow!!.dismiss() }
+
+        mPopupWindow!!.setOnDismissListener {
+            for (i in 0 until mMenuCount) {
+                mIvMenuArrow[i].setImageResource(mDownArrow)
+                animDown(mIvMenuArrow[mColumnSelected])
+                mRlMenuBacks[i].setBackgroundColor(mMenuBackColor)
+                mTvMenuTitles[i].setTextColor(mMenuTitleTextColor)
+            }
+        }
+
+    }
+
+
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
@@ -80,7 +168,7 @@ class ScrollDropDownMenu constructor(context: Context, attributes: AttributeSet?
 
                     v.setOnClickListener {
                         v.findViewById<ImageView>(R.id.iv_menu_arrow).setImageResource(R.mipmap.drop_down_selected_icon)
-                        popupWindow.showAsDropDown(v)
+                        mPopupWindow?.showAsDropDown(v)
                     }
                     dropDownMenuLl.addView(v, lp)
                 }
@@ -99,5 +187,17 @@ class ScrollDropDownMenu constructor(context: Context, attributes: AttributeSet?
         }
     }
 
+
+    fun animUp(imageView: ImageView) {
+        val animator = ObjectAnimator.ofFloat(imageView, "rotation", 0f, 180f)
+        animator.duration = 300
+        animator.start()
+    }
+
+    fun animDown(imageView: ImageView) {
+        val animator = ObjectAnimator.ofFloat(imageView, "rotation", 180f, 0f)
+        animator.duration = 300
+        animator.start()
+    }
 
 }
