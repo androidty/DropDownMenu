@@ -64,7 +64,7 @@ class ScrollDropMenuActivity : AppCompatActivity() {
 
     fun initDropDownMenu() {
         mDropDownMenu1?.setDefaultStr(strings)
-        mDropDownMenu?.onMenuClickListener = object : OnMenuClickListener {
+        mDropDownMenu1?.onMenuClickListener = object : OnMenuClickListener {
             override fun onMenuClickListener(context: Context, index: Int) {
                 setDropList(context, index)
             }
@@ -112,7 +112,7 @@ class ScrollDropMenuActivity : AppCompatActivity() {
 
         //下拉列表点击事件
         dropAdapter!!.setOnItemClickListener { adapter, view, position ->
-            (adapter.data[position] as DropBean)?.name?.let { mDropDownMenu.setCurrentTitle(index, it) }
+            (adapter.data[position] as DropBean)?.name?.let { mDropDownMenu1.setCurrentTitle(index, it) }
             when (index) {
                 0 -> option1 = (adapter.data[position] as DropBean)?.name
                 1 -> option2 = (adapter.data[position] as DropBean)?.name

@@ -111,12 +111,27 @@ class ScrollDropDownMenu constructor(context: Context, attributes: AttributeSet?
     }
 
 
+    @SuppressLint("ResourceAsColor")
     private fun init(context: Context, attributes: AttributeSet? = null) {
+        this.mContext = context
         removeAllViews()
         var rootView: View? = null
         rootView = if (scrollAble!!) LayoutInflater.from(context)?.inflate(R.layout.drop_menu_scroll, null)
         else LayoutInflater.from(context)?.inflate(R.layout.drop_menu_no_scroll, null)
 
+
+        val ta = mContext!!.obtainStyledAttributes(attributes, R.styleable.DropDownMenu)
+        mMenuTitleTextColor = ta.getColor(R.styleable.DropDownMenu_menuTitleTextColor, R.color.default_menu_press_back)
+        mMenuTitleTextSize = DensityUtil.px2sp(mContext!!, ta.getDimension(R.styleable.DropDownMenu_menuTitleTextSize, 14f))
+        mMenuBackColor = ta.getColor(R.styleable.DropDownMenu_menuBackColor, R.color.default_menu_back)
+        mMenuPressedBackColor = ta.getColor(R.styleable.DropDownMenu_menuPressedBackColor, R.color.default_menu_press_back)
+        mMenuPressedTitleTextColor = ta.getColor(R.styleable.DropDownMenu_menuPressedTitleTextColor, R.color.default_menu_press_text)
+        mUpArrow = ta.getResourceId(R.styleable.DropDownMenu_menuDropDownSelectedIcon, R.mipmap.drop_down_selected_icon)
+        mDownArrow = ta.getResourceId(R.styleable.DropDownMenu_menuDropDownUnSelectedIcon, R.mipmap.drop_down_unselected_icon)
+        mArrowMarginTitle = DensityUtil.px2dp(mContext!!, ta.getDimension(R.styleable.DropDownMenu_menuArrowMarginTitle, 20f)).toInt()
+        ta.recycle()
+        mMenuListSelectorRes = R.color.white
+        mArrowMarginTitle = 10
         dropDownMenuLl = rootView!!.findViewById(R.id.dropMenuLl)
         horizontalScrollView = rootView!!.findViewById(R.id.hScrollView)
         addView(rootView)
@@ -140,7 +155,7 @@ class ScrollDropDownMenu constructor(context: Context, attributes: AttributeSet?
         mRlShadow!!.setOnClickListener { mPopupWindow!!.dismiss() }
 
         mPopupWindow!!.setOnDismissListener {
-            for (i in 0 until mMenuCount) {
+            for (i in defaultStrs!!.indices) {
                 mIvMenuArrow[i].setImageResource(mDownArrow)
                 animDown(mIvMenuArrow[mColumnSelected])
                 mRlMenuBacks[i].setBackgroundColor(mMenuBackColor)
@@ -163,14 +178,39 @@ class ScrollDropDownMenu constructor(context: Context, attributes: AttributeSet?
                     var iv = v.findViewById<View>(R.id.iv_menu_arrow) as ImageView
                     iv.setImageResource(R.mipmap.drop_down_unselected_icon)
                     tv.text = defaultStrs!![i]
-                    tv.setTextColor(context.resources.getColor(R.color.default_menu_text))
+                    tv.setTextColor(context.resources.getColor(R.color.black))
                     val lp = LinearLayout.LayoutParams(DensityUtil.getScreenWidth(context) / 7 * 2, ViewGroup.LayoutParams.MATCH_PARENT)
+                    dropDownMenuLl.addView(v, lp)
+                    mTvMenuTitles.add(tv)
+                    val rl = v.findViewById<View>(R.id.rl_menu_head) as RelativeLayout
+                    rl.setBackgroundColor(mMenuBackColor)
+                    mRlMenuBacks.add(rl)
+
+                    mIvMenuArrow.add(iv)
+                    mIvMenuArrow[i].setImageResource(mDownArrow)
+
+                    val params = iv.layoutParams as RelativeLayout.LayoutParams
+                    params.leftMargin = mArrowMarginTitle
+                    iv.layoutParams = params
 
                     v.setOnClickListener {
+                        if (mCuttentIndex == i) {
+                            mPopupWindow!!.dismiss()
+                            mCuttentIndex = -1
+                            return@setOnClickListener
+                        }
+                        mCuttentIndex = i
                         v.findViewById<ImageView>(R.id.iv_menu_arrow).setImageResource(R.mipmap.drop_down_selected_icon)
-                        mPopupWindow?.showAsDropDown(v)
+                        if (onMenuClickListener != null) {
+                            onMenuClickListener!!.onMenuClickListener(mContext!!, i)
+                        }
+                        mColumnSelected = i
+                        mTvMenuTitles[i].setTextColor(mMenuPressedTitleTextColor)
+                        mRlMenuBacks[i].setBackgroundColor(mMenuPressedBackColor)
+                        mIvMenuArrow[i].setImageResource(mUpArrow)
+                        animUp(mIvMenuArrow[i])
+                        mPopupWindow!!.showAsDropDown(v)
                     }
-                    dropDownMenuLl.addView(v, lp)
                 }
             } else {
                 for (title in defaultStrs!!) {
@@ -187,7 +227,9 @@ class ScrollDropDownMenu constructor(context: Context, attributes: AttributeSet?
         }
     }
 
-
+    fun setCurrentTitle(cuttentIndex: Int, currentTitle: String) {
+        mTvMenuTitles[cuttentIndex].text = currentTitle
+    }
     fun animUp(imageView: ImageView) {
         val animator = ObjectAnimator.ofFloat(imageView, "rotation", 0f, 180f)
         animator.duration = 300
