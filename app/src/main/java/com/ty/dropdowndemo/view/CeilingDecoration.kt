@@ -18,7 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
 
-import com.ty.DropBean
+import com.ty.dropdowndemo.bean.DropBean
 import com.ty.dropdowndemo.R
 import com.ty.utils.DensityUtil
 
@@ -39,7 +39,7 @@ class CeilingDecoration(context: Context) : RecyclerView.ItemDecoration() {
     private var headerLineColor = -0x111112
     private val txtYAxis: Float
     private var mRecyclerView: RecyclerView? = null
-    private var mDropBeans: List<DropBean>? = null
+    private var mDropBeans: List<DropBean.GroupBean.BrandsBean>? = null
 
     private var isInitHeight = false
 
@@ -141,7 +141,7 @@ class CeilingDecoration(context: Context) : RecyclerView.ItemDecoration() {
 
     fun getHeaderName(pos: Int): String? {
         return if (mDropBeans != null && !mDropBeans!!.isEmpty() && mDropBeans!![pos] != null) {
-            mDropBeans!![pos].letter
+            mDropBeans!![pos].firstAlphabet
         } else {
             null
         }
@@ -257,7 +257,7 @@ class CeilingDecoration(context: Context) : RecyclerView.ItemDecoration() {
         Log.i(TAG, "绘制悬浮头部")
     }
 
-    fun setDropBean(dropBeans: List<DropBean>) {
+    fun setDropBean(dropBeans: List<DropBean.GroupBean.BrandsBean>) {
         mDropBeans = dropBeans
     }
 
