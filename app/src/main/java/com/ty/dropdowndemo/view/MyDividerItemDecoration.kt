@@ -58,11 +58,7 @@ class MyDividerItemDecoration : RecyclerView.ItemDecoration {
         var left = left
         var top = top
         var right = right
-        if (divider == null) {
-            mDivider = ContextCompat.getDrawable(context, R.drawable.line_divider)
-        } else {
-            mDivider = divider
-        }
+        mDivider = divider ?: ContextCompat.getDrawable(context, R.drawable.line_divider)
         top = DensityUtil.dp2px(context, top.toFloat())
         left = DensityUtil.dp2px(context, left.toFloat())
         right = DensityUtil.dp2px(context, right.toFloat())

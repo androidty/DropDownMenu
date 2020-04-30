@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
@@ -17,12 +16,11 @@ import com.ty.dropdowndemo.bean.DropBean
 import com.ty.dropdowndemo.view.MyAdapter
 import com.ty.dropdowndemo.view.MyDividerItemDecoration
 import com.ty.listener.OnMenuClickListener
-import com.ty.utils.getJsonFromAssets
 import kotlinx.android.synthetic.main.activity_dropmenu.*
 
 class DropMenuActivity : AppCompatActivity() {
     val strings = arrayOf("选择城市选择城市", "选择性别", "选择年龄","价格趋势", "价格趋势")
-    val arr1 = arrayOf("全部城市", "北京", "上海", "广州", "深圳")
+    val arr1 = arrayOf("全部城市", "北京", "上海", "广州", "深圳","杭州")
     val arr2 = arrayOf("性别", "男", "女")
     val arr3 = arrayOf("全部年龄", "10", "20", "30", "40", "50", "60", "70", "80", "90")
 
@@ -73,6 +71,7 @@ class DropMenuActivity : AppCompatActivity() {
     }
 
     fun setDropList(context: Context, index: Int) {
+
         if (mDropDownView == null) {
             mDropDownView = LayoutInflater.from(this).inflate(R.layout.popupwindow_menu, null)
         }
@@ -81,12 +80,14 @@ class DropMenuActivity : AppCompatActivity() {
         }
         if (mShadowRl == null) {
             mShadowRl = mDropDownView!!.findViewById(R.id.rl_menu_shadow)
-            mShadowRl!!.setBackgroundColor(Color.parseColor("#33000000"))
+            mShadowRl!!.setBackgroundColor(Color.parseColor("#11000000"))
+            mShadowRl?.setOnClickListener{mDropDownMenu.dismiss()}
         }
         if (mDropRlv == null) {
             mDropRlv = mDropDownView!!.findViewById(R.id.mDropRlv)
         }
-        mDropDownMenu?.setDropWindow(mPopupWindow!!, mShadowRl!!)
+//        mDropDownMenu?.setDropWindow(mPopupWindow!!, mShadowRl!!)
+        mDropDownMenu?.setDropWindow(mDropDownView!!)
         if (mDropRlv!!.itemDecorationCount == 0) {
             mDropRlv!!.addItemDecoration(MyDividerItemDecoration(this, null, 1, 15, 15, true))
         }
@@ -121,7 +122,8 @@ class DropMenuActivity : AppCompatActivity() {
                 2 -> option3 = (adapter.data[position] as DropBean).name
             }
             setSelect(position, adapter.data as List<DropBean>)
-            mPopupWindow!!.dismiss()
+//            mPopupWindow!!.dismiss()
+            mDropDownMenu.dismiss()
             Toast.makeText(DropMenuActivity@ this, "$option1 $option2 $option3", Toast.LENGTH_LONG).show()
         }
     }

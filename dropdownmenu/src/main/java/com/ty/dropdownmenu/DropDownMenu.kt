@@ -4,11 +4,10 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -97,7 +96,7 @@ class DropDownMenu constructor(context: Context, attributes: AttributeSet? = nul
 
     private var isDebug = true
 
-    private var mCuttentIndex = -1
+    private var mCurrentIndex = -1
 
     var onMenuClickListener: OnMenuClickListener? = null
 
@@ -144,6 +143,11 @@ class DropDownMenu constructor(context: Context, attributes: AttributeSet? = nul
     }
 
 
+    fun initMenu(defaultMenuTitle: Array<String>) {
+        initMenu(defaultMenuTitle, false)
+    }
+
+
     fun initMenu(defaultMenuTitle: Array<String>, scroll: Boolean) {
         defaultStrs = defaultMenuTitle
         setScrollAble(scroll)
@@ -152,22 +156,35 @@ class DropDownMenu constructor(context: Context, attributes: AttributeSet? = nul
     }
 
     fun setDropWindow(popupWindow: PopupWindow) {
-        val rl = RelativeLayout(mContext)
-        rl.setBackgroundColor(Color.WHITE)
-        setDropWindow(popupWindow, rl)
+
+        setDropWindow(popupWindow, null)
+    }
+
+    fun setDropWindow(contentView: View) {
+        setDropWindow(PopupWindow(contentView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, false))
     }
 
 
-    fun setDropWindow(popupWindow: PopupWindow, rlShadow: RelativeLayout) {
+    fun setDropWindow(popupWindow: PopupWindow, rlShadow: RelativeLayout?) {
         mPopupWindow = popupWindow
         mRlShadow = rlShadow
 
         mPopupWindow!!.isTouchable = true
         mPopupWindow!!.isOutsideTouchable = true
         mPopupWindow!!.setBackgroundDrawable(BitmapDrawable())
-        mRlShadow!!.setOnClickListener { mPopupWindow!!.dismiss() }
+        mRlShadow?.setOnClickListener { dismiss() }
+
+        mPopupWindow!!.setTouchInterceptor { v, event ->
+            if (event.y < 0) {
+                mCurrentIndex = -2
+                true
+            }
+            false
+        }
+
 
         mPopupWindow!!.setOnDismissListener {
+            mCurrentIndex = -1
             for (i in defaultStrs!!.indices) {
                 mIvMenuArrow[i].setImageResource(mDownArrow)
                 animDown(mIvMenuArrow[mColumnSelected])
@@ -176,6 +193,10 @@ class DropDownMenu constructor(context: Context, attributes: AttributeSet? = nul
             }
         }
 
+    }
+
+    fun dismiss() {
+        mPopupWindow?.dismiss()
     }
 
 
@@ -207,12 +228,13 @@ class DropDownMenu constructor(context: Context, attributes: AttributeSet? = nul
                 params.leftMargin = mArrowMarginTitle
                 iv.layoutParams = params
                 v.setOnClickListener {
-                    if (mCuttentIndex == i) {
-                        mPopupWindow!!.dismiss()
-                        mCuttentIndex = -1
+                    if (mCurrentIndex == -2) {
+                    }
+                    if (mCurrentIndex == i && mPopupWindow!!.isShowing) {
+                        dismiss()
                         return@setOnClickListener
                     }
-                    mCuttentIndex = i
+                    mCurrentIndex = i
                     v.findViewById<ImageView>(R.id.iv_menu_arrow).setImageResource(mUpArrow)
                     if (onMenuClickListener != null) {
                         onMenuClickListener!!.onMenuClickListener(mContext!!, i)
@@ -245,13 +267,13 @@ class DropDownMenu constructor(context: Context, attributes: AttributeSet? = nul
         mTvMenuTitles[currentIndex].text = currentTitle
     }
 
-    fun animUp(imageView: ImageView) {
+    private fun animUp(imageView: ImageView) {
         val animator = ObjectAnimator.ofFloat(imageView, "rotation", 0f, 180f)
         animator.duration = 300
         animator.start()
     }
 
-    fun animDown(imageView: ImageView) {
+    private fun animDown(imageView: ImageView) {
         val animator = ObjectAnimator.ofFloat(imageView, "rotation", 180f, 0f)
         animator.duration = 300
         animator.start()
