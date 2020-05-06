@@ -61,7 +61,7 @@ class DropMenuActivity : AppCompatActivity() {
     }
 
     private fun initDropDownMenu() {
-        mDropDownMenu?.initMenu(strings, true)
+        mDropDownMenu?.initMenu(strings, false)
         mDropDownMenu?.onMenuClickListener = object : OnMenuClickListener {
             override fun onMenuClickListener(context: Context, index: Int) {
                 setDropList(context, index)
@@ -77,7 +77,7 @@ class DropMenuActivity : AppCompatActivity() {
         if (mShadowRl == null) {
             mShadowRl = mDropDownView!!.findViewById(R.id.rl_menu_shadow)
             mShadowRl!!.setBackgroundColor(Color.parseColor("#11000000"))
-//            mShadowRl?.setOnClickListener{mDropDownMenu.dismiss()}
+            mShadowRl?.setOnClickListener{mDropDownMenu.dismiss()}
         }
         if (mDropRlv == null) {
             mDropRlv = mDropDownView!!.findViewById(R.id.mDropRlv)

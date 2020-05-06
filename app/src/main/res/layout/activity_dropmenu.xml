@@ -11,7 +11,7 @@
         android:id="@+id/mDropDownMenu"
         android:layout_width="match_parent"
         android:layout_height="46dp"
-        android:background="#f0f0f0"
+        android:background="@color/white"
         app:menuArrowMarginTitle="20dp"
         app:menuBackColor="#f0f0f0"
         app:menuPressedBackColor="#ffffff"

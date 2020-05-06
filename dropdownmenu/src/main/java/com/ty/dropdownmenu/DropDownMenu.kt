@@ -114,12 +114,16 @@ class DropDownMenu constructor(context: Context, attributes: AttributeSet? = nul
         val ta = mContext!!.obtainStyledAttributes(attributes, R.styleable.DropDownMenu)
         mMenuTitleTextColor = ta.getColor(R.styleable.DropDownMenu_menuTitleTextColor, R.color.default_menu_press_back)
         mMenuTitleTextSize = DensityUtil.px2sp(mContext!!, ta.getDimension(R.styleable.DropDownMenu_menuTitleTextSize, 14f))
+
         mMenuBackColor = ta.getColor(R.styleable.DropDownMenu_menuBackColor, R.color.default_menu_back)
+
         mMenuPressedBackColor = ta.getColor(R.styleable.DropDownMenu_menuPressedBackColor, R.color.default_menu_press_back)
         mMenuPressedTitleTextColor = ta.getColor(R.styleable.DropDownMenu_menuPressedTitleTextColor, R.color.default_menu_press_text)
+
         mUpArrow = ta.getResourceId(R.styleable.DropDownMenu_menuDropDownSelectedIcon, R.mipmap.drop_down_selected_icon)
         mDownArrow = ta.getResourceId(R.styleable.DropDownMenu_menuDropDownUnSelectedIcon, R.mipmap.drop_down_unselected_icon)
         mArrowMarginTitle = DensityUtil.px2dp(mContext!!, ta.getDimension(R.styleable.DropDownMenu_menuArrowMarginTitle, 20f)).toInt()
+
         ta.recycle()
         mMenuListSelectorRes = R.color.white
         mArrowMarginTitle = 10
