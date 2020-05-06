@@ -33,6 +33,7 @@ dependencies {
     implementation project(':dropdownmenu')
     implementation "androidx.core:core-ktx:+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+//    implementation 'com.github.androidty:DropDownMenu:1.0.0'
 }
 repositories {
     mavenCentral()
