@@ -31,7 +31,6 @@ class DropMenuActivity : AppCompatActivity() {
 
     private var mDropDownView: View? = null
     var mShadowRl: RelativeLayout? = null
-    var mPopupWindow: PopupWindow? = null
     var mDropRlv: RecyclerView? = null
     private var dropAdapter: MyAdapter<DropBean>? = null
 
@@ -75,18 +74,14 @@ class DropMenuActivity : AppCompatActivity() {
         if (mDropDownView == null) {
             mDropDownView = LayoutInflater.from(this).inflate(R.layout.popupwindow_menu, null)
         }
-        if (mPopupWindow == null) {
-            mPopupWindow = PopupWindow(mDropDownView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, false)
-        }
         if (mShadowRl == null) {
             mShadowRl = mDropDownView!!.findViewById(R.id.rl_menu_shadow)
             mShadowRl!!.setBackgroundColor(Color.parseColor("#11000000"))
-            mShadowRl?.setOnClickListener{mDropDownMenu.dismiss()}
+//            mShadowRl?.setOnClickListener{mDropDownMenu.dismiss()}
         }
         if (mDropRlv == null) {
             mDropRlv = mDropDownView!!.findViewById(R.id.mDropRlv)
         }
-//        mDropDownMenu?.setDropWindow(mPopupWindow!!, mShadowRl!!)
         mDropDownMenu?.setDropWindow(mDropDownView!!)
         if (mDropRlv!!.itemDecorationCount == 0) {
             mDropRlv!!.addItemDecoration(MyDividerItemDecoration(this, null, 1, 15, 15, true))
