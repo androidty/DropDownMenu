@@ -165,6 +165,7 @@ class DropDownMenu constructor(context: Context, attributes: AttributeSet? = nul
     }
 
 
+    var clickOut = false
     fun setDropWindow(popupWindow: PopupWindow, rlShadow: RelativeLayout?) {
         mPopupWindow = popupWindow
         mRlShadow = rlShadow
@@ -176,7 +177,7 @@ class DropDownMenu constructor(context: Context, attributes: AttributeSet? = nul
 
         mPopupWindow!!.setTouchInterceptor { v, event ->
             if (event.y < 0) {
-                mCurrentIndex = -2
+                clickOut = true
                 true
             }
             false
@@ -184,7 +185,6 @@ class DropDownMenu constructor(context: Context, attributes: AttributeSet? = nul
 
 
         mPopupWindow!!.setOnDismissListener {
-            mCurrentIndex = -1
             for (i in defaultStrs!!.indices) {
                 mIvMenuArrow[i].setImageResource(mDownArrow)
                 animDown(mIvMenuArrow[mColumnSelected])
@@ -228,12 +228,19 @@ class DropDownMenu constructor(context: Context, attributes: AttributeSet? = nul
                 params.leftMargin = mArrowMarginTitle
                 iv.layoutParams = params
                 v.setOnClickListener {
-                    if (mCurrentIndex == -2) {
+
+                    if (clickOut) {
+                        clickOut = false
+                        if (mCurrentIndex == i && !mPopupWindow!!.isShowing) {
+                            return@setOnClickListener
+                        }
                     }
-                    if (mCurrentIndex == i && mPopupWindow!!.isShowing) {
-                        dismiss()
-                        return@setOnClickListener
-                    }
+
+
+//                    if (mCurrentIndex == i && mPopupWindow!!.isShowing) {
+//                        dismiss()
+//                        return@setOnClickListener
+//                    }
                     mCurrentIndex = i
                     v.findViewById<ImageView>(R.id.iv_menu_arrow).setImageResource(mUpArrow)
                     if (onMenuClickListener != null) {
